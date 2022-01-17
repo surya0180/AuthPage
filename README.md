@@ -7,15 +7,21 @@ This is a small web application built with mern stack that demonstrates authenti
 git clone https://github.com/surya0180/Nodeauth.io.git
 ```
 2. Install all the packages required for the client and the server seperately
+3. Go inside the repository.
+```
+cd nodeauth.io
+```
 * For the client
 ```
 cd client/
 npm install
+cd ..
 ```
 * For the server
 ```
 cd server/
 npm install
+cd ..
 ```
 
 **Now the application is ready to start the run**
