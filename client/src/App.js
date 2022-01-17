@@ -24,7 +24,7 @@ function App() {
       }
     })
   }, [])
-
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
   return (
     <div>
       <AnimatePresence exitBeforeEnter>
@@ -32,7 +32,9 @@ function App() {
           <Route path="/*" element={<Home />}>
             <Route path="login" element={<Login />} />
             <Route path='signup' element={<Signup />} />
-            <Route path="profile" element={<Profile />} />
+            {isAuthenticated && <Route path="profile" element={<Profile />} />}
+            {!isAuthenticated && <Route path="profile" element={<Navigate to="/login" />} />}
+            {/* <Route path="profile" element={<Profile />} /> */}
           </Route>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="*" element={<Navigate to="/login" />} />

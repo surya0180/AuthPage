@@ -8,7 +8,6 @@ client/.pnp.js
 
 # testing
 client/coverage
-server/config/default.json
 
 # production
 client/build

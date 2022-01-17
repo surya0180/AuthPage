@@ -1,3 +1,2 @@
-# Socio
-Socio is a social application that brings all developers together and explore some interested content and stuff.
-This application is built using MERN stack.
+# Nodeauth.io
+This is a small web application built with mern stack that demonstrates authentication of user. This is done as part of internship assesment at iraitech
