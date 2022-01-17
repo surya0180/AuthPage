@@ -1,11 +1,9 @@
-import { Box, Button, IconButton, InputAdornment, TextField } from '@mui/material'
-import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Button, IconButton, InputAdornment, TextField } from '@mui/material'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import MuiPhoneNumber from 'material-ui-phone-number';
-import axios from 'axios'
 import { Close, Visibility, VisibilityOff } from '@mui/icons-material';
-import { register } from './authActions';
-import AuthContext from './authContext';
+import { register } from './auth-actions';
 
 const Signup = () => {
     const initData = {
@@ -19,31 +17,25 @@ const Signup = () => {
     const [data, setData] = useState(initData)
     const [error, setError] = useState(false)
     const [alerts, setAlerts] = useState([])
-    const ctx = useContext(AuthContext)
+    const navigate = useNavigate()
+
     const formHandler = async (event) => {
         event.preventDefault();
         if (error) {
             return
         }
         register(data).then((response) => {
-            if(response.status === 'failure') {
+            if (response.status === 'failure') {
                 setAlerts(response.payload)
                 localStorage.removeItem('token')
-                ctx.setData({
-                    token: null,
-                    isAuthenticated: false,
-                    loading: false
-                })
+                localStorage.setItem('isAuthenticated', false)
             }
-            if(response.status === 'success') {
+            if (response.status === 'success') {
                 console.log(response.payload)
                 localStorage.setItem('token', response.payload.token)
-                ctx.setData({
-                    token: response.payload.token,
-                    isAuthenticated: true,
-                    loading: false
-                })
+                localStorage.setItem('isAuthenticated', true)
                 setData(initData)
+                navigate('/profile', { replace: true })
             }
         })
     }
@@ -51,7 +43,7 @@ const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
-    console.log(ctx)
+
     return (
         <div className='container' style={{
             backgroundColor: 'white',

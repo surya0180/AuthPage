@@ -30,3 +30,18 @@ export const register = async ({ firstname, lastname, email, phone, address, pas
         return { status: 'failure', payload: error.response.data.errors }
     }
 }
+
+export const login = async ( email, password ) => {
+    const config = {
+        headers: {
+            'Content-type': 'application/json',
+        }
+    }
+    const body = JSON.stringify({ email, password })
+    try {
+        const result = await axios.post('/api/auth', body, config)
+        return { status: 'success', payload: result.data }
+    } catch (error) {
+        return { status: 'failure', payload: error.response.data.errors }
+    }
+}

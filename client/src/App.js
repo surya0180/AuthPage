@@ -1,8 +1,7 @@
 import { AnimatePresence } from 'framer-motion';
-import React, { useContext, useEffect } from 'react'
+import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { user } from './components/authActions';
-import AuthContext from './components/authContext';
+import { user } from './components/auth-actions';
 import Home from './components/Home';
 import Login from './components/Login';
 import Profile from './components/Profile';
@@ -10,16 +9,22 @@ import Signup from './components/Signup';
 
 function App() {
   const location = useLocation();
-  const ctx = useContext(AuthContext)
+  const [loading, setLoading] = useState(false)
+
   useEffect(() => {
+    setLoading(true)
     user().then((response) => {
-      if(response.status === 'success') {
-        ctx.setData({ isAuthenticated: true, loading: false, user: response.payload })
-      } else {
-        ctx.setData({ isAuthenticated: false, loading: false, user: null })
+      if (response.status === 'success') {
+        setLoading(false)
+        localStorage.setItem('isAuthenticated', true)
+      }
+      if (response.status === 'failure') {
+        setLoading(false)
+        localStorage.setItem('isAuthenticated', false)
       }
     })
   }, [])
+
   return (
     <div>
       <AnimatePresence exitBeforeEnter>
