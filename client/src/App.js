@@ -3,6 +3,7 @@ import React from 'react'
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Home from './components/Home';
 import Login from './components/Login';
+import Profile from './components/Profile';
 import Signup from './components/Signup';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           <Route path="/*" element={<Home />}>
             <Route path="login" element={<Login />} />
             <Route path='signup' element={<Signup />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="*" element={<Navigate to="/login" />} />

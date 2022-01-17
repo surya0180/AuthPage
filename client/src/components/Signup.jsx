@@ -15,10 +15,10 @@ const Signup = () => {
     const [data, setData] = useState(initData)
     const [error, setError] = useState(false)
     const formHandler = (event) => {
+        event.preventDefault();
         if(error) {
             return
         }
-        event.preventDefault();
         console.log(data)
         setData(initData)
     }
