@@ -1,4 +1,5 @@
-import { Button, TextField } from '@mui/material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { Button, IconButton, InputAdornment, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -12,6 +13,10 @@ const Login = () => {
         setPassword("")
     }
 
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
     return (
         <div className='container' style={{
             backgroundColor: 'white',
@@ -20,20 +25,33 @@ const Login = () => {
         }}>
             <h2>Login</h2>
             <form onSubmit={formHandler}>
-                <TextField id="email" label="Email" variant="outlined" sx={{ width: '100%', margin: '1em 0' }} 
+                <TextField id="email" label="Email" variant="outlined" sx={{ width: '100%', margin: '1em 0' }}
                     onChange={(event) => setEmail(event.target.value)}
                     type="email"
                     value={email}
                     required
                 />
-                <TextField id="password" label="Password" variant="outlined" sx={{ width: '100%', margin: '1em 0' }} 
+                <TextField id="password" label="Password" variant="outlined" sx={{ width: '100%', margin: '1em 0' }}
                     onChange={(event) => setPassword(event.target.value)}
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     value={password}
+                    InputProps={{ // <-- This is where the toggle button is added.
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                >
+                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                        )
+                    }}
                     required
                 />
                 <Button variant="contained" type='submit'>Login</Button>
-                <p style={{margin: '1em'}}>New to the website ? <Link to="/signup">Signup</Link> here </p>
+                <p style={{ margin: '1em' }}>New to the website ? <Link to="/signup">Signup</Link> here </p>
             </form>
         </div>
     )

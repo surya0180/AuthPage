@@ -1,7 +1,11 @@
-import { Button, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, Button, IconButton, InputAdornment, TextField } from '@mui/material'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import MuiPhoneNumber from 'material-ui-phone-number';
+import axios from 'axios'
+import { Close, Visibility, VisibilityOff } from '@mui/icons-material';
+import { register } from './authActions';
+import AuthContext from './authContext';
 
 const Signup = () => {
     const initData = {
@@ -14,14 +18,40 @@ const Signup = () => {
     }
     const [data, setData] = useState(initData)
     const [error, setError] = useState(false)
-    const formHandler = (event) => {
+    const [alerts, setAlerts] = useState([])
+    const ctx = useContext(AuthContext)
+    const formHandler = async (event) => {
         event.preventDefault();
-        if(error) {
+        if (error) {
             return
         }
-        console.log(data)
-        setData(initData)
+        register(data).then((response) => {
+            if(response.status === 'failure') {
+                setAlerts(response.payload)
+                localStorage.removeItem('token')
+                ctx.setData({
+                    token: null,
+                    isAuthenticated: false,
+                    loading: false
+                })
+            }
+            if(response.status === 'success') {
+                console.log(response.payload)
+                localStorage.setItem('token', response.payload.token)
+                ctx.setData({
+                    token: response.payload.token,
+                    isAuthenticated: true,
+                    loading: false
+                })
+                setData(initData)
+            }
+        })
     }
+
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
+    console.log(ctx)
     return (
         <div className='container' style={{
             backgroundColor: 'white',
@@ -30,6 +60,20 @@ const Signup = () => {
             width: '60%',
         }}>
             <h2>Signup</h2>
+            {console.log(alerts.length)}
+            {alerts.length !== 0 &&
+                alerts.map((err, i) => {
+                    return <div key={i} className="container d-flex justify-content-between align-items-center" style={{ backgroundColor: 'red', textAlign: 'start', color: 'white', padding: '0.4em 0.7em', margin: '0.7em 0', borderRadius: '5px' }}>
+                        {err.msg}
+                        <IconButton onClick={() => {
+                            setAlerts((prevState) => prevState.filter(obj => obj.param !== err.param))
+                        }}>
+                            <Close sx={{ color: 'white' }} />
+                        </IconButton>
+                    </div>
+                })
+            }
+
             <form onSubmit={formHandler}>
                 <div className="row">
                     <div className="col-md-6"><TextField id="fn" label="Firstname" variant="outlined" sx={{ width: '100%', margin: '0.7em 0' }}
@@ -96,7 +140,7 @@ const Signup = () => {
                             password: event.target.value
                         }
                     })}
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     value={data.password}
                     required
                 />
@@ -105,9 +149,22 @@ const Signup = () => {
                         console.log("I am here")
                         setError(event.target.value !== data.password)
                     }}
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     required
                     error={error}
+                    InputProps={{ // <-- This is where the toggle button is added.
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                >
+                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                        )
+                    }}
                 />
                 <Button variant="contained" type='submit'>Register</Button>
                 <p style={{ margin: '1em' }}>Already have an account ? <Link to="/login">login</Link> here </p>

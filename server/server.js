@@ -3,7 +3,6 @@ import connectDB from './config/db.js';
 import userRoute from './routes/api/users.js';
 import authRoute from './routes/api/auth.js';
 import profileRoute from './routes/api/profile.js';
-import postRoute from './routes/api/post.js';
 
 
 const app = express();
@@ -14,7 +13,6 @@ app.get('/', (req, res) => res.send("API Running"))
 app.use('/api/users', userRoute)
 app.use('/api/auth', authRoute)
 app.use('/api/profile', profileRoute)
-app.use('/api/posts', postRoute)
 
 const PORT = process.env.PORT || 5000
 
