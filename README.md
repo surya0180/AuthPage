@@ -1,5 +1,5 @@
 # Nodeauth.io
-This is a small web application built with mern stack that demonstrates authentication of user. This is done as part of internship assesment at iraitech
+This is a small web application built with mern stack that demonstrates authentication of user.
 
 ## How to install the application.
 1. Clone this repository using below command
